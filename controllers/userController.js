@@ -35,3 +35,26 @@ exports.signup = BigPromise(async (req, res, next) => {
 
   cookieToken(user, res);
 });
+
+exports.login = BigPromise(async (req, res, next) => {
+  const { email, password } = req.body;
+
+  if (!email || !password) {
+    return next(new CustomError("please provide email and password"));
+  }
+
+  const user = await User.findOne({ email }).select("+password");
+
+  if (!user) {
+    return next(
+      new CustomError("You are not registered, please signup first", 400)
+    );
+  }
+
+  const isPasswordCorrect = await user.isEnteredPasswordCorrect(password);
+
+  if (!isPasswordCorrect) {
+    return next(new CustomError("Wrong password"));
+  }
+  cookieToken(user, res);
+});
