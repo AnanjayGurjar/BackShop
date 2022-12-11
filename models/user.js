@@ -44,11 +44,11 @@ const userSchema = new mongoose.Schema({
 });
 
 //encrypt password before save - HOOKS
-userSchema.pre('save', async function(next) {
-    if(!this.isModified('password')){
+userSchema.pre("save", async function(next) {
+    if(!this.isModified("password")){
         return next();
     }
-    this.passowrd = await bcrypt.hash(this.passowrd, 10)
+    this.password = await bcrypt.hash(this.password, 10)
 });
 
 //method to validate the password with passed on user password
