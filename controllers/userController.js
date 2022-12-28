@@ -168,3 +168,47 @@ exports.changePassword = BigPromise(async (req, res, next) => {
 
   cookieToken(user, res);
 });
+
+exports.updateUserDetails = BigPromise(async (req, res, next) => {
+  //assuming all the data no matter we want to update or not will be coming from the frontend
+  const { name, email } = req.body;
+
+  if (!name || !email) {
+    return next(new CustomError("Name and email are mandatory", 400));
+  }
+
+  const newData = {
+    name: name,
+    email: email,
+  };
+
+  if (req.files && req.files.photo !== "") {
+    //delete the previous photo and upload the new one
+    const user = await User.findById(req.user.id);
+    const imageId = user.photo.id;
+    const resp = await cloudinary.v2.uploader.destroy(imageId);
+
+    const result = await cloudinary.v2.uploader.upload(
+      req.files.photo.tempFilePath,
+      {
+        folder: "users",
+        width: 150,
+        crop: "scale",
+      }
+    );
+
+    newData.photo = {
+      id: result.public_id,
+      secure_url: result.secure_url,
+    };
+  }
+  const user = await User.findByIdAndUpdate(req.user.id, newData, {
+    new: true, //it indicates that we wnat the updated user object
+    runValidators: true,
+    useFindAndModify: false,
+  });
+
+  res.status(200).json({
+    success: true,
+  });
+});
