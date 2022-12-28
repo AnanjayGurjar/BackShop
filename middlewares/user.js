@@ -4,6 +4,7 @@ const CustomError = require("../utils/customError");
 const jwt = require("jsonwebtoken");
 
 exports.isLoggedIn = BigPromise(async (req, res, next) => {
+  // NOTE:  if token is not passed through both header and cookie the code will never reach the error asking to login first as it will give error here itself as it is trying to find header and replacing its "Bearer " which is undefined
   const token =
     req.cookies.token || req.header("Authorization").replace("Bearer", "");
 
