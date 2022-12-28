@@ -78,8 +78,9 @@ userSchema.methods.getForgotPasswordToken = function () {
     .digest("hex");
 
   //time of token
-  this.forgotPasswordExpiry = Date.now() + 20 * 20 * 1000;
+  this.forgotPasswordExpiry = Date.now() + 20 * 60 * 1000;
 
+  //simple token is sent, we have to encrypt the token once recieved and then match
   return forgotPasswordToken;
 };
 
