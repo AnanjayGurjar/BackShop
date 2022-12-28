@@ -20,6 +20,7 @@ app.use(express.urlencoded({ extended: true }));
 
 //temp check
 app.set("view engine", "ejs");
+
 //cookies and file middleware
 app.use(cookieParser());
 app.use(

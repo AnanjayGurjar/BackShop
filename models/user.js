@@ -56,7 +56,7 @@ userSchema.pre("save", async function (next) {
 userSchema.methods.isEnteredPasswordCorrect = async function (
   userEnteredPassword
 ) {
-  return await bcrypt.compare(userEnteredPassword, this.passowrd);
+  return await bcrypt.compare(userEnteredPassword, this.password);
 };
 
 //method for create and return jwt token
@@ -67,7 +67,7 @@ userSchema.methods.getJwtToken = function () {
 };
 
 //generate forgot password token(string)
-userSchema.method.getForgotPasswordToken = function () {
+userSchema.methods.getForgotPasswordToken = function () {
   //generate a long and random string
   const forgotPasswordToken = crypto.randomBytes(20).toString("hex");
 

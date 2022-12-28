@@ -44,6 +44,7 @@ exports.login = BigPromise(async (req, res, next) => {
     return next(new CustomError("please provide email and password"));
   }
 
+  //bydefault for password in our model -> select: false, hence we need to explicitly mention so that we get the password and we can compare it
   const user = await User.findOne({ email }).select("+password");
 
   if (!user) {
@@ -77,18 +78,20 @@ exports.forgotPassword = BigPromise(async (req, res, next) => {
 
   const user = await User.findOne({ email });
 
+  console.log(user);
   if (!user) {
     return next(new CustomError("Email not found as registered", 400));
   }
 
-  const forgotToken = await user.getForgotPasswordToken();
-  user.save({ validateBeforeSave: false });
+  const forgotToken = user.getForgotPasswordToken();
+  // validates the mongoose object before persisting it to database
+  await user.save({ validateBeforeSave: false });
 
   const myUrl = `${req.protocol}://${req.get(
     "host"
   )}/password/reset/${forgotToken}`;
 
-  const message = `Copy paste this link in your URL and hit enter \n\n ${myUrl}`;
+  const message = `Copy paste this link in your browser and hit enter \n\n ${myUrl}`;
 
   try {
     await mailHelper({
