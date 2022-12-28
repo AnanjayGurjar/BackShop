@@ -18,3 +18,13 @@ exports.isLoggedIn = BigPromise(async (req, res, next) => {
 
   next();
 });
+
+exports.customRole = (...roles) => {
+  //spreading the arguments as roles and finding if the user role is in the argument
+  return (req, res, next) => {
+    if (!roles.includes(req.user.role)) {
+      return next(new CustomError("You are not allowed for this route", 403));
+    }
+    next();
+  };
+};
