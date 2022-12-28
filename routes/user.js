@@ -12,6 +12,7 @@ const {
   updateUserDetails,
   adminGetAllUsers,
   managerGetAllUsers,
+  adminGetOneUser,
 } = require("../controllers/userController");
 const { isLoggedIn, customRole } = require("../middlewares/user");
 
@@ -28,6 +29,10 @@ router.route("/userdashboard/update").post(isLoggedIn, updateUserDetails);
 router
   .route("/admin/users")
   .get(isLoggedIn, customRole("admin"), adminGetAllUsers);
+
+router
+  .route("/admin/user/:id")
+  .get(isLoggedIn, customRole("admin"), adminGetOneUser);
 
 /*********MANAGER ROUTES***********/
 router
