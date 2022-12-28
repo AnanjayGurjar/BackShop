@@ -1,24 +1,23 @@
 const nodemailer = require("nodemailer");
 
-const mailHelper = async () => {
+const mailHelper = async (option) => {
   const transporter = nodemailer.createTransport({
-    host: "smtp.ethereal.email",
-    port: 587,
+    host: process.env.SMTP_HOST,
+    port: process.env.SMTP_PORT,
     auth: {
-      user: testAccount.user, // generated ethereal user
-      pass: testAccount.pass, // generated ethereal password
+      user: process.env.SMTP_USER, // generated ethereal user
+      pass: process.env.SMTP_PASS, // generated ethereal password
     },
   });
 
   const message = {
-    from: '"Fred Foo 👻" <foo@example.com>', // sender address
-    to: "bar@example.com, baz@example.com", // list of receivers
-    subject: "Hello ✔", // Subject line
-    text: "Hello world?", // plain text body
-    html: "<b>Hello world?</b>", // html body
+    from: "ananjaygurjar92@gmail.com", // sender address
+    to: option.email, // list of receivers
+    subject: option.subject, // Subject line
+    text: option.message, // plain text body
   };
   // send mail with defined transport object
-  let info = await transporter.sendMail();
+  let info = await transporter.sendMail(message);
 };
 
 module.exports = mailHelper;
