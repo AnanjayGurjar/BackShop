@@ -1,7 +1,17 @@
 const express = require("express");
-const {} = require("../controllers/productController");
+const {
+  addProduct,
+  getFilteredProducts,
+} = require("../controllers/productController");
 const router = express.Router();
+const { isLoggedIn, customRole } = require("../middlewares/user");
 
-router.route("/testproduct").get();
+//user routes
+router.route("/products").get(getFilteredProducts);
+
+//admin routes
+router
+  .route("/admin/product/add")
+  .post(isLoggedIn, customRole("admin"), addProduct);
 
 module.exports = router;

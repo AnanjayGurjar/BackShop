@@ -40,6 +40,7 @@ class WhereClause {
     const jsonOfCopyQ = JSON.parse(stringOfCopyQ);
 
     this.base = this.base.find(jsonOfCopyQ);
+    return this;
   }
 
   pager(resultsPerPage) {
@@ -52,3 +53,5 @@ class WhereClause {
     return this;
   }
 }
+
+module.exports = WhereClause;
