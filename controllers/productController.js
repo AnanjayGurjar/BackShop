@@ -4,36 +4,6 @@ const CustomError = require("../utils/customError");
 const cloudinary = require("cloudinary");
 const WhereClause = require("../utils/whereClause");
 
-exports.adminAddProduct = BigPromise(async (req, res, next) => {
-  //images
-  let imageArr = [];
-  if (!req.files) {
-    return next(new CustomError("images ar mandatory", 401));
-  }
-  for (let index = 0; index < req.files.photos.length; index++) {
-    let result = await cloudinary.v2.uploader.upload(
-      req.files.photos[index].tempFilePath,
-      {
-        folder: "products",
-      }
-    );
-    imageArr.push({
-      id: result.public_id,
-      secure_url: result.secure_url,
-    });
-  }
-
-  req.body.photos = imageArr;
-  req.body.user = req.user.id;
-
-  const product = await Product.create(req.body);
-
-  res.status(200).json({
-    success: true,
-    product,
-  });
-});
-
 exports.getFilteredProducts = BigPromise(async (req, res, next) => {
   const resultsPerPage = 6;
   const totalProductCount = await Product.countDocuments();
@@ -70,8 +40,39 @@ exports.getOneProduct = BigPromise(async (req, res, next) => {
   });
 });
 
+/****ADMIN CONTROLLERS***/
+exports.adminAddProduct = BigPromise(async (req, res, next) => {
+  //images
+  let imageArr = [];
+  if (!req.files) {
+    return next(new CustomError("images ar mandatory", 401));
+  }
+  for (let index = 0; index < req.files.photos.length; index++) {
+    let result = await cloudinary.v2.uploader.upload(
+      req.files.photos[index].tempFilePath,
+      {
+        folder: "products",
+      }
+    );
+    imageArr.push({
+      id: result.public_id,
+      secure_url: result.secure_url,
+    });
+  }
+
+  req.body.photos = imageArr;
+  req.body.user = req.user.id;
+
+  const product = await Product.create(req.body);
+
+  res.status(200).json({
+    success: true,
+    product,
+  });
+});
+
 exports.adminUpdateProduct = BigPromise(async (req, res, next) => {
-  const product = await Product.findById(req.params.id);
+  let product = await Product.findById(req.params.id);
 
   if (!product) {
     return next(new CustomError("No product found with this id", 401));
