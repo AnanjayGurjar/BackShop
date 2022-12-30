@@ -87,7 +87,7 @@ exports.deleteReview = BigPromise(async (req, res, next) => {
   const product = await Product.findById(productId);
 
   const reviews = product.reviews.filter(
-    (rev) => rev.user.toString() === req.user._id.toString() //will filter out if the condition statisfy
+    (rev) => rev.user.toString() !== req.user._id.toString()
   );
 
   const numberOfReviews = reviews.length;
@@ -118,6 +118,9 @@ exports.deleteReview = BigPromise(async (req, res, next) => {
 
 exports.getAllReviewsForOneProduct = BigPromise(async (req, res, next) => {
   const product = await Product.findById(req.query.id);
+  if (!product) {
+    return next(new CustomError("No product was found", 401));
+  }
 
   res.status(200).json({
     success: true,
