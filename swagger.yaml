@@ -1,0 +1,22 @@
+openapi: 3.0.0
+info:
+  title: Ecommerce app
+  description: A complete backend for a ecommerce website
+  version: 1.0.0
+
+servers:
+  - url: https://ananjay-ecomm-backend.onrender.com/api/v1
+    description: deployed on render.com, all the routes following is shown below
+  - url: http://localhost:4000/api/v1
+    description: local host version on port 4000
+
+# 1) Define the cookie name
+components:
+  securitySchemes:
+    cookieAuth: # arbitrary name for the security scheme; will be used in the "security" key later
+      type: apiKey
+      in: cookie
+      name: token # cookie name
+# 2) Apply cookie auth globally to all operations
+security:
+  - cookieAuth: []
