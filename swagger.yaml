@@ -4,8 +4,7 @@ info:
   description: A complete backend for a ecommerce website
   version: 1.0.0
   contact:
-    email: hitesh@lco.dev
-    url: "https://lco.dev"
+    email: ananjaygurjar@outlook.com
 
 servers:
   - url: https://ananjay-ecomm-backend.onrender.com/api/v1
