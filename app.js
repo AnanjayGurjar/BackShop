@@ -7,7 +7,6 @@ const app = express();
 const morgan = require("morgan");
 const cookieParser = require("cookie-parser");
 const fileUpload = require("express-fileupload");
-
 /**for swagger documentation, not used in the current project **/
 const swaggerUi = require("swagger-ui-express");
 const YAML = require("yamljs");
