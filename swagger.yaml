@@ -1736,3 +1736,62 @@ paths:
           description: Bad request
         500:
           description: internal server error
+
+  /stripekey:
+    get:
+      tags:
+        - Payment
+      summary: gets you the public stripe key
+      requestBody:
+
+      responses:
+        200:
+          description: All good success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  stripekey:
+                    type: string
+
+        400:
+          description: Bad request
+        500:
+          description: internal server error
+
+  /capturestripe:
+    post:
+      tags:
+        - Payment
+      summary: send amount in number after multiplying it by 100. Also request from swagger UI are not proper as to capture payment we need to send dummy card details
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - amount
+              properties:
+                amount:
+                  type: number
+
+      responses:
+        200:
+          description: All good success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  amount:
+                    type: number
+                  client_secret:
+                    type: string
+
+        400:
+          description: Bad request
+        500:
+          description: internal server error
